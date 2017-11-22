@@ -1,41 +1,26 @@
-The function ”read_train.py” shall be fed with a europarl7-file. The 
-second argument can be named anything. The file will contain around 
-860689 lines. The lines to be parsed can be inserted in a new .txt-file. 
-After that, paste the following command in Terminal:
+This software contains the following modules:
+read_train.py
+label.py
+bigram.py
+L1.py
+L1_bigram.py
 
-java -Xmx2g -cp "*" edu.stanford.nlp.parser.nndep.DependencyParser \
+The translated sentences requires a login to mumin.ling.su.se. It is found in /home/corpora/europarl7 
+and is called english-sourcelang.train.bz2. The free parser is found
+at https://nlp.stanford.edu/software/lex-parser.shtml and is called 
+stanford-parser-full-2017-06-09. To run it, Java 8 is required (JDK 1.8.0+).
+If the "java -version" command returns 1.8+ it will be working. 
+
+To run the code, follow these steps.
+
+1)separate language tags from sentences: in the python interpreter, write 
+from read_train import read_train
+and then 
+read_train(”input_file.txt”, ”output_file.txt”)
+2)parse text: java -Xmx2g -cp "*" edu.stanford.nlp.parser.nndep.DependencyParser \
     -model edu/stanford/nlp/models/parser/nndep/english_UD.gz \
-    -textFile data/english-onesent.txt -outFile data/english-onesent.txt.out
-
-The file ending in .out is the output file. It is the input file for 
-the class Classify in the code label.py (unigrams) or bigram.py. It 
-returns a list of dictionaries, and the dictionaries corresponds to the 
-sentences. To have bigrams returned instead of unigrams, use the file 
-bigram.py. The L1 class in L1.py takes two arguments: the list of dictionaries, 
-and a list of labels, which has to be created separately. In the L1-code, 
-the following calls produce a list of labels from the file with 100 
-sentences (the files following the hashtag produce a list of two languages):
-
-from label import Classify
-c = Classify("train3.txt") #"outCS-SV.txt"
-a = c.obj_create()
-l1 = L1(a, "train3_label.txt") #"labels.txt"
-l1.data_input(a)
-l1.lang_input("train3_label.txt") #"labels.txt"
-l1.log_obj()
-c1 = Classify("test.txt") #"test2.txt"
-a1 = c1.obj_create()
-l1.data_input(a1)
-l1.lang_input("test1_label.txt") #"test2_label.txt"
-l1.log_obj()
-l1.predict_lang(a1)
-
-The input files can be chosen freely.
+    -textFile data/output_file.txt -outFile data/output_file.txt.out
+3)train and test classifier with unigrams: python L1.py
+4)train and test classifier with bigrams: python L1_bigram.py
 
 Erik Hidmark
-
-Footnote:
-
-The java command comes from README.TXT. from the unzipped file: 
-stanford-parser-full-2017-06-09. Downloaded from 
-https://nlp.stanford.edu/software/lex-parser.shtml. Requires Java 8.
