@@ -1,4 +1,8 @@
-
+"""Takes a number of parsed sentences as input and returns a list of
+dictionaries, where each dictionary corresponds to a sentence and contains
+the frequencies of bigrams, where each bigram consists of grammatical relations
+occuring next to each other.
+"""
 import re
 
 class Classify(object):
