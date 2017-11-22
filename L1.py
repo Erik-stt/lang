@@ -67,6 +67,18 @@ class L1(object):
             obj = log.predict(data)
             output = self.label.inverse_transform(obj)
             self.out.append(output)
+        
+        c = 0
+        for l in self.label_list[1]:
+            c += 1
+        compare_tagging = zip(self.label_list[1], output)
+        c_out = 0
+        
+        for (t1, t2) in compare_tagging:
+            if t1 == t2:
+                c_out += 1
+        accuracy = (c_out/c)
+        
         print(accuracy)
         print(self.out)
         print(self.label_list[1])
