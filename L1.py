@@ -1,20 +1,26 @@
+"""Trains a model and tests it on translated sentences to find the source
+language. It is based on unigrams.
+"""
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction import DictVectorizer 
 from sklearn import preprocessing
+from label import Classify
 
 class L1(object):
     def __init__(self, affixes, labels):
         self.affixes = affixes #list
         self.labels = labels
         self.affixes_list = []
-        self.label_list = []
-        self.log_lst = []
+        self.label_list = [] #test data is saved here as well
+        self.log_lst = [] #the log-object is stored here for later use in
+        #predict_lang
         self.log_lst_test = []
         self.d = DictVectorizer()
         self.label = preprocessing.LabelEncoder()
         self.log = LogisticRegression()
 
-    def data_input(self, affixes):
+    def data_input(self, affixes): #stores list of dictionaries
         if len(self.affixes_list) == 0:
             self.affixes_list.append(self.affixes)
         else:
@@ -62,16 +68,20 @@ class L1(object):
             output = self.label.inverse_transform(obj)
             self.out.append(output)
         return self.out
-from label import Classify
-c = Classify("train3.txt") #"trainout.txt"
-a = c.obj_create()
-l1 = L1(a, "train3_label.txt") #"train_label.txt"
-l1.data_input(a)
-l1.lang_input("train3_label.txt") #"train_label.txt"
-l1.log_obj()
-c1 = Classify("test.txt") #"testout.txt"
-a1 = c1.obj_create()
-l1.data_input(a1)
-l1.lang_input("test1_label.txt") #"test_label.txt"
-l1.log_obj()
-l1.predict_lang(a1)
+
+def main():
+    c = Classify("train3.txt") #"trainout.txt"
+    a = c.obj_create()
+    l1 = L1(a, "train3_label.txt") #"train_label.txt"
+    l1.data_input(a)
+    l1.lang_input("train3_label.txt") #"train_label.txt"
+    l1.log_obj()
+    c1 = Classify("test.txt") #"testout.txt"
+    a1 = c1.obj_create()
+    l1.data_input(a1)
+    l1.lang_input("test1_label.txt") #"test_label.txt"
+    l1.log_obj()
+    l1.predict_lang(a1)
+
+if __name__ == "__main__":
+    main()
