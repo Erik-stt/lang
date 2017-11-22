@@ -67,6 +67,9 @@ class L1(object):
             obj = log.predict(data)
             output = self.label.inverse_transform(obj)
             self.out.append(output)
+        print(accuracy)
+        print(self.out)
+        print(self.label_list[1])
         return self.out
 
 def main():
